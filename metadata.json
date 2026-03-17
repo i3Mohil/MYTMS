@@ -1,0 +1,5 @@
+{
+  "name": "Transport Bilty Maker",
+  "description": "Offline-first Transport Management System (TMS) for creating LRs, Invoices, and managing ledgers.",
+  "requestFramePermissions": []
+}
