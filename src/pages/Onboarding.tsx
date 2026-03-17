@@ -37,11 +37,12 @@ export default function Onboarding() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 py-8">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-4">
           <div className="bg-indigo-100 p-3 rounded-full">
             <Building2 className="w-8 h-8 text-indigo-600" />
           </div>
         </div>
+        <h1 className="text-xl font-bold text-center text-indigo-900 mb-6 uppercase tracking-wider">Transport Bilty Expert</h1>
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
           Company Setup
         </h2>

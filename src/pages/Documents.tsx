@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Link } from 'react-router-dom';
-import { Plus, Search, FileText, Download } from 'lucide-react';
+import { Plus, Search, FileText, Eye } from 'lucide-react';
 import db from '../db/db';
 import { generatePDF } from '../lib/pdfGenerator';
 
@@ -29,12 +29,13 @@ export default function Documents() {
     doc.delivery.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDownload = (doc: any) => {
+  const handlePreview = (doc: any) => {
     if (!company || !company[0]) return;
     try {
       const userEmail = user?.[0]?.email;
       const pdf = generatePDF(doc, company[0], userEmail);
-      pdf.save(`${doc.lrNumber}.pdf`);
+      const blobUrl = pdf.output('bloburl');
+      window.open(blobUrl, '_blank');
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Failed to generate PDF');
@@ -117,10 +118,11 @@ export default function Documents() {
                 <div className="font-bold text-gray-900">₹{doc.freight} <span className="text-xs font-normal text-gray-500">({doc.paymentType})</span></div>
                 <div className="flex gap-2">
                   <button 
-                    onClick={() => handleDownload(doc)}
+                    onClick={() => handlePreview(doc)}
                     className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                    title="Preview LR"
                   >
-                    <Download className="w-5 h-5" />
+                    <Eye className="w-5 h-5" />
                   </button>
                 </div>
               </div>

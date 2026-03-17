@@ -7,11 +7,15 @@ import { generatePDF } from '../lib/pdfGenerator';
 export default function Dashboard() {
   const company = useLiveQuery(() => db.company.toArray());
   const recentDocs = useLiveQuery(() => db.documents.orderBy('id').reverse().limit(5).toArray());
-  const pendingDocs = useLiveQuery(() => db.documents.where('status').notEqual('Delivered').count());
+  const pendingDocs = useLiveQuery(() => db.documents.filter(doc => (doc.remainingToPay || 0) > 0 && doc.paymentType === 'To Pay').toArray());
+  const pendingAmount = pendingDocs?.reduce((sum, doc) => sum + (doc.remainingToPay || 0), 0) || 0;
+
+  const user = useLiveQuery(() => db.users.toArray());
 
   const handlePreviewPDF = (doc: Document) => {
     if (!company || !company[0]) return;
-    const pdf = generatePDF(doc, company[0]);
+    const userEmail = user?.[0]?.email;
+    const pdf = generatePDF(doc, company[0], userEmail);
     const blob = pdf.output('blob');
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
@@ -54,7 +58,7 @@ export default function Dashboard() {
           <div className="bg-amber-100 p-3 rounded-full">
             <Clock className="w-6 h-6 text-amber-600" />
           </div>
-          <span className="font-medium text-gray-900">Pending: {pendingDocs || 0}</span>
+          <span className="font-medium text-gray-900">Pending: ₹{pendingAmount}</span>
         </Link>
         <Link
           to="/ledger"

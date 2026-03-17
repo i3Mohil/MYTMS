@@ -50,6 +50,8 @@ export interface DirectoryEntry {
   phone: string;
   address: string;
   notes: string;
+  truckNo?: string;
+  rto?: string;
 }
 
 export interface Document {
